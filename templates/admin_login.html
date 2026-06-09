@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center my-5">
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-sm-5 w-100" style="max-width: 400px;">
+        <div class="text-center mb-4">
+            <div class="d-inline-flex bg-success-subtle text-success p-3 rounded-circle mb-3 border">
+                <i class="bi bi-shield-lock-fill fs-3"></i>
+            </div>
+            <h5 class="fw-bold text-dark tracking-tight m-0">CSI Admin Gate</h5>
+            <p class="text-muted small mt-1">Provide credential password variables to unlock server datasets.</p>
+        </div>
+        
+        <form method="POST" action="{{ url_for('admin_login') }}">
+            <div class="mb-4">
+                <label class="form-label fw-semibold text-secondary small mb-1">Administrative Secret Password</label>
+                <input type="password" name="password" required placeholder="••••••••" class="form-control rounded-3 py-2 shadow-none text-dark">
+            </div>
+            <button type="submit" class="btn btn-csi w-100 py-2.5 rounded-3 text-uppercase">Unlock Portal</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

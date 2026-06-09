@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-12 mb-2">
+        <a href="{{ url_for('home') }}" class="text-csi fw-bold text-decoration-none d-inline-flex align-items-center gap-2 border bg-white px-3 py-2 rounded-3 shadow-xs">
+            <i class="bi bi-arrow-left-circle-fill fs-5"></i> Back to Catalog
+        </a>
+    </div>
+    <div class="col-md-8 mt-2">
+        <h3 class="fw-bold text-dark tracking-tight m-0">CSI Dhanuvachapuram Admin Suite</h3>
+        <p class="text-muted small mb-0">Control book catalog indexing variables, register offline church membership certificates, and execute transaction ledger actions.</p>
+    </div>
+    <div class="col-md-4 text-md-end mt-2 mt-md-0">
+        <a href="{{ url_for('admin_logout') }}" class="btn btn-outline-danger btn-sm px-4 py-2 rounded-3 fw-bold">
+            <i class="bi bi-box-arrow-left me-1"></i>Secure Logout
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 my-1">
+    <div class="col-lg-4 d-flex flex-column gap-4">
+        
+        <div class="card border-0 rounded-4 p-4 shadow-sm bg-white border-top border-4 border-success">
+            <h5 class="fw-bold text-dark mb-1">Register Offline Membership</h5>
+            <p class="text-muted small mb-3">Activate an offline member card ID inside the dataset profile indexes.</p>
+            <form method="POST" action="{{ url_for('admin_portal') }}" class="d-flex flex-column gap-2.5">
+                <input type="hidden" name="form_type" value="add_member">
+                <div>
+                    <label class="form-label small text-secondary fw-semibold mb-1">Assign Membership ID *</label>
+                    <input type="text" name="member_id" required placeholder="e.g., CSI-204" class="form-control rounded-3 border py-1.5 text-dark font-bold text-uppercase shadow-none">
+                </div>
+                <div>
+                    <label class="form-label small text-secondary fw-semibold mb-1">Full Member Name *</label>
+                    <input type="text" name="member_name" required placeholder="e.g., Anish Kumar" class="form-control rounded-3 border py-1.5 text-dark shadow-none">
+                </div>
+                <div>
+                    <label class="form-label small text-secondary fw-semibold mb-1">Contact Phone Number *</label>
+                    <input type="tel" name="member_phone" required pattern="[0-9]{10}" placeholder="e.g., 9876543210" class="form-control rounded-3 border py-1.5 text-dark shadow-none">
+                </div>
+                <button type="submit" class="btn btn-success w-100 py-2 rounded-3 font-bold text-uppercase small shadow-xs mt-1">Activate Membership</button>
+            </form>
+        </div>
+
+        <div class="card border-0 rounded-4 p-4 shadow-sm bg-white">
+            <h5 class="fw-bold text-dark mb-1">Add a New Book</h5>
+            <p class="text-muted small mb-4">Register fresh text stock entries into core catalog files.</p>
+            <form method="POST" enctype="multipart/form-data" action="{{ url_for('admin_portal') }}" class="d-flex flex-column gap-3">
+                <input type="hidden" name="form_type" value="add_book">
+                <div>
+                    <label class="form-label small text-secondary fw-semibold mb-1">Book Title *</label>
+                    <input type="text" name="title" required class="form-control rounded-3 border py-2 shadow-none text-dark">
+                </div>
+                <div>
+                    <label class="form-label small text-secondary fw-semibold mb-1">Author Name *</label>
+                    <input type="text" name="author" required class="form-control rounded-3 border py-2 shadow-none text-dark">
+                </div>
+                <div>
+                    <label class="form-label small text-secondary fw-semibold mb-1">Choose Category / കാറ്റഗറി *</label>
+                    <select name="category_select" id="catSelector" class="form-select rounded-3 border py-2 shadow-none text-dark" onchange="checkNewCategoryOption()">
+                        <option value="" disabled selected>-- Select Existing Category --</option>
+                        {% for cat in books | map(attribute='category') | unique | sort %}
+                            <option value="{{ cat }}">{{ cat }}</option>
+                        {% endfor %}
+                        <option value="NEW_CATEGORY" class="text-success fw-bold">+ Add Brand New Category</option>
+                    </select>
+                </div>
+                <div id="newCatFormBlock" class="d-none">
+                    <label class="form-label small text-success fw-bold mb-1">Type New Category Designation *</label>
+                    <input type="text" name="category_new" id="newCatField" placeholder="e.g., Novel" class="form-control rounded-3 border py-2 text-dark shadow-none">
+                </div>
+                <div>
+                    <label class="form-label small text-secondary fw-semibold mb-1">Upload Cover Photo *</label>
+                    <input type="file" name="book_image" accept="image/*" class="form-control rounded-3 border py-2 shadow-none text-dark">
+                </div>
+                <div>
+                    <label class="form-label small text-secondary fw-semibold mb-1">Number of Copies *</label>
+                    <input type="number" name="copies" min="1" value="1" required class="form-control rounded-3 border py-2 shadow-none text-dark">
+                </div>
+                <button type="submit" class="btn btn-csi w-100 py-2.5 rounded-3 shadow-sm mt-1">Save Book to Library</button>
+            </form>
+        </div>
+
+        <div class="card border-0 rounded-4 p-4 shadow-sm bg-white border-start border-4 border-warning">
+            <h6 class="fw-bold text-dark mb-1"><i class="bi bi-key-fill text-warning me-1"></i>Change System Password</h6>
+            <form method="POST" action="{{ url_for('change_password') }}">
+                <div class="input-group mb-1">
+                    <input type="text" name="new_password" placeholder="Type new password..." required class="form-control form-control-sm rounded-start-3 border shadow-none text-dark py-2">
+                    <button type="submit" class="btn btn-warning btn-sm text-dark font-bold px-3 rounded-end-3 uppercase">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        
+        <div class="p-2 bg-white rounded-4 shadow-sm d-flex gap-2 mb-4 border">
+            <ul class="nav nav-pills w-100 d-flex gap-2 justify-content-between" id="adminControlTabs" role="tablist">
+                <li class="nav-item flex-grow-1 text-center" role="presentation">
+                    <button class="nav-link active w-100 py-2.5 rounded-3 fw-bold text-uppercase tracking-wider btn shadow-none d-flex align-items-center justify-content-center gap-2" 
+                            id="stock-tab" data-bs-toggle="tab" data-bs-target="#stock-pane" type="button" role="tab" style="font-size: 0.72rem;">
+                        <i class="bi bi-journal-album fs-5"></i> See Book Stock ({{ books|length }})
+                    </button>
+                </li>
+                <li class="nav-item flex-grow-1 text-center" role="presentation">
+                    <button class="nav-link w-100 py-2.5 rounded-3 fw-bold text-uppercase tracking-wider btn shadow-none d-flex align-items-center justify-content-center gap-2" 
+                            id="logs-tab" data-bs-toggle="tab" data-bs-target="#logs-pane" type="button" role="tab" style="font-size: 0.72rem;">
+                        <i class="bi bi-clock-history fs-5"></i> Who Borrowed ({{ logs|length }})
+                    </button>
+                </li>
+                <li class="nav-item flex-grow-1 text-center" role="presentation">
+                    <button class="nav-link w-100 py-2.5 rounded-3 fw-bold text-uppercase tracking-wider btn shadow-none d-flex align-items-center justify-content-center gap-2" 
+                            id="members-tab" data-bs-toggle="tab" data-bs-target="#members-pane" type="button" role="tab" style="font-size: 0.72rem;">
+                        <i class="bi bi-person-badge-fill fs-5"></i> Members List ({{ members|length }})
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <style>
+            .nav-pills .nav-link { color: #4b5563; background-color: #f3f4f6; }
+            .nav-pills .nav-link.active { background-color: #14532d !important; color: white !important; }
+        </style>
+
+        <div class="tab-content" id="adminControlTabsContent">
+            
+            <div class="tab-pane fade show active" id="stock-pane" role="tabpanel" aria-labelledby="stock-tab">
+                <div class="card border-0 rounded-4 p-4 shadow-sm bg-white">
+                    <h5 class="fw-bold text-dark mb-1">Current Stock Levels (Categorized View)</h5>
+                    <p class="text-muted small mb-3">All available text inventories sorted cleanly by genre classification codes.</p>
+                    <div class="table-responsive" style="max-height: 550px; overflow-y: auto;">
+                        <table class="table align-middle mb-0 small">
+                            <thead class="sticky-top bg-white" style="z-index: 1;">
+                                <tr class="text-muted border-bottom fw-bold text-uppercase text-[0.65rem]">
+                                    <th>Category Group</th>
+                                    <th>Book Title Designation</th>
+                                    <th class="text-center">Available / Total</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in books %}
+                                <tr class="border-bottom">
+                                    <td><span class="badge bg-success-subtle text-success border font-bold text-uppercase">{{ item.category }}</span></td>
+                                    <td class="fw-bold text-dark">{{ item.title }} <span class="text-muted font-normal block small">by {{ item.author }}</span></td>
+                                    <td class="text-center font-monospace fw-bold text-dark fs-6">{{ item.available_copies }} / {{ item.total_copies }}</td>
+                                    <td class="text-end">
+                                        <div class="d-inline-flex gap-1">
+                                            <a href="{{ url_for('edit_book', book_id=item.id) }}" class="btn btn-sm btn-outline-secondary px-2.5 py-1 rounded-2"><i class="bi bi-pencil-square"></i></a>
+                                            <form method="POST" action="{{ url_for('delete_book_action', book_id=item.id) }}" onsubmit="return confirm('Completely delete this item?');">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger px-2.5 py-1 rounded-2"><i class="bi bi-trash3-fill"></i></button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="logs-pane" role="tabpanel" aria-labelledby="logs-tab">
+                <div class="card border-0 rounded-4 p-4 shadow-sm bg-white">
+                    <h5 class="fw-bold text-dark mb-1">Who Borrowed What (Active Book Issue Logs)</h5>
+                    <p class="text-muted small mb-3">Books currently checked out by members. Click "Mark Returned" to safely check an item back in.</p>
+                    <div style="max-height: 550px; overflow-y: auto;">
+                        {% if logs %}
+                        <div class="d-flex flex-column gap-3 pe-1">
+                            {% for log in logs %}
+                            <div class="d-flex justify-content-between align-items-center p-3 rounded-3 bg-light border animate-fade-in">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-white p-2.5 rounded-3 text-success border shadow-xs me-3">
+                                        <span class="badge bg-csi px-2 py-1.5 font-monospace fs-6">{{ log.member_id }}</span>
+                                    </div>
+                                    <div>
+                                        <p class="fw-bold text-dark mb-0.5 fs-6">{{ log.title }}</p>
+                                        <p class="text-muted small mb-0">Borrower: <span class="fw-bold text-dark">{{ log.user_name }}</span> | Phone: <span class="text-csi fw-bold">{{ log.borrower_phone }}</span></p>
+                                        <p class="text-muted font-monospace mt-1 mb-0" style="font-size: 0.65rem;">Automatic Due Date (30 Days): <span class="text-danger font-bold">{{ log.return_date }}</span></p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <form method="POST" action="{{ url_for('return_book_action', issue_id=log.id) }}">
+                                        <button type="submit" class="btn btn-success btn-sm px-3 rounded-3 fw-bold small text-uppercase">
+                                            <i class="bi bi-check2-square me-1"></i>Mark Returned
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5 border border-dashed rounded-3">
+                            <i class="bi bi-bookmark-check text-muted fs-2 mb-2 d-block"></i>
+                            <p class="text-muted small fw-semibold mb-0">No active library transactions found.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="members-pane" role="tabpanel" aria-labelledby="members-tab">
+                <div class="card border-0 rounded-4 p-4 shadow-sm bg-white">
+                    <h5 class="fw-bold text-dark mb-1">Registered Active Membership Profiles</h5>
+                    <p class="text-muted small mb-3">Live profile log sheets tracking profiles authorized to check out catalog materials.</p>
+                    <div class="table-responsive" style="max-height: 550px; overflow-y: auto;">
+                        <table class="table align-middle mb-0 table-sm small">
+                            <thead class="sticky-top bg-white" style="z-index: 1;">
+                                <tr class="text-muted border-bottom fw-bold text-uppercase text-[0.6rem]">
+                                    <th>Member ID</th>
+                                    <th>Full Name</th>
+                                    <th>Registered Phone</th>
+                                    <th>Join Date</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for m in members %}
+                                <tr>
+                                    <td class="py-2"><span class="badge bg-dark px-2 py-1 font-monospace">{{ m.member_id }}</span></td>
+                                    <td class="py-2 fw-bold text-dark">{{ m.member_name }}</td>
+                                    <td class="py-2 text-secondary font-monospace">{{ m.member_phone }}</td>
+                                    <td class="py-2 text-muted small font-monospace">{{ m.registration_date }}</td>
+                                    <td class="py-2 text-end">
+                                        <a href="{{ url_for('edit_member', member_id=m.member_id) }}" class="btn btn-xs btn-outline-secondary px-2 py-0.5 rounded-2" style="font-size:0.75rem;">
+                                            <i class="bi bi-pencil-square me-1"></i>Edit
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+function checkNewCategoryOption() {
+    var dropdown = document.getElementById("catSelector");
+    var block = document.getElementById("newCatFormBlock");
+    var input = document.getElementById("newCatField");
+    if (dropdown.value === "NEW_CATEGORY") {
+        block.classList.remove("d-none");
+        input.setAttribute("required", "required");
+    } else {
+        block.classList.add("d-none");
+        input.removeAttribute("required");
+        input.value = "";
+    }
+}
+</script>
+
+{% endblock %}

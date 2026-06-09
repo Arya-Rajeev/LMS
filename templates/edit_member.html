@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center my-4">
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-sm-5 w-100" style="max-width: 480px; background-color: #ffffff;">
+        <div class="mb-4 text-center">
+            <div class="d-inline-flex bg-success-subtle text-success p-2.5 rounded-circle mb-2 border">
+                <i class="bi bi-person-gear fs-3"></i>
+            </div>
+            <h4 class="fw-bold text-dark tracking-tight m-0">Update Member Profile</h4>
+            <p class="text-muted small mt-1">Modify account variables for Member ID: <span class="badge bg-dark px-2 py-1 font-monospace">{{ member.member_id }}</span></p>
+        </div>
+
+        <form method="POST" action="{{ url_for('edit_member', member_id=member.member_id) }}" class="d-flex flex-column gap-3">
+            <div>
+                <label class="form-label small text-secondary fw-semibold mb-1">Full Member Name *</label>
+                <input type="text" name="member_name" value="{{ member.member_name }}" required class="form-control rounded-3 border py-2 text-dark shadow-none fw-medium">
+            </div>
+            <div>
+                <label class="form-label small text-secondary fw-semibold mb-1">Registered Contact Phone Number *</label>
+                <input type="tel" name="member_phone" value="{{ member.member_phone }}" required pattern="[0-9]{10}" class="form-control rounded-3 border py-2 text-dark shadow-none font-monospace">
+                <div class="form-text text-muted" style="font-size:0.65rem;">Requires a valid 10-digit mobile sequence.</div>
+            </div>
+            
+            <div class="d-flex gap-2 mt-2">
+                <a href="{{ url_for('admin_portal') }}" class="btn btn-light border w-50 py-2.5 rounded-3 fw-bold small text-uppercase text-secondary">Cancel</a>
+                <button type="submit" class="btn btn-csi w-50 py-2.5 rounded-3 fw-bold small text-uppercase">Save Updates</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

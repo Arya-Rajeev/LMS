@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container py-2">
+    <div class="row mb-4">
+        <div class="col-12">
+            <a href="{{ url_for('home') }}" class="text-csi fw-bold text-decoration-none d-inline-flex align-items-center gap-2 border bg-white px-3 py-2 rounded-3 shadow-xs">
+                <i class="bi bi-arrow-left-circle-fill fs-5"></i> Back to Main Catalog
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-5 align-items-start">
+        
+        <div class="col-md-4">
+            <div class="position-sticky" style="top: 2rem;">
+                <div class="card border-0 rounded-4 shadow-sm overflow-hidden bg-white p-3">
+                    <img src="{{ book.image_url }}" alt="{{ book.title }}" class="img-fluid rounded-3 shadow-xs w-100 object-fit-cover" style="max-height: 420px;">
+                    <div class="mt-3 text-center">
+                        <span class="badge bg-success-subtle text-success border px-3 py-1.5 font-bold uppercase rounded-pill tracking-wider" style="font-size: 0.7rem;">
+                            {{ book.category }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card border-0 rounded-4 p-4 p-md-5 shadow-sm bg-white mb-4">
+                <h2 class="fw-bold text-dark tracking-tight mb-1">{{ book.title }}</h2>
+                <p class="text-muted fs-5 mb-4">by <span class="text-dark fw-semibold">{{ book.author }}</span></p>
+
+                <div class="d-flex gap-3 mb-4 pb-4 border-bottom">
+                    <div class="bg-light px-4 py-2.5 rounded-3 border text-center">
+                        <span class="text-muted small d-block uppercase fw-semibold tracking-wider mb-0.5" style="font-size: 0.65rem;">Available Stock</span>
+                        <span class="fs-4 fw-bold {% if book.available_copies > 0 %}text-success{% else %}text-danger{% endif %} font-monospace">
+                            {{ book.available_copies }}
+                        </span>
+                    </div>
+                    <div class="bg-light px-4 py-2.5 rounded-3 border text-center">
+                        <span class="text-muted small d-block uppercase fw-semibold tracking-wider mb-0.5" style="font-size: 0.65rem;">Total Volume</span>
+                        <span class="fs-4 fw-bold text-dark font-monospace">{{ book.total_copies }}</span>
+                    </div>
+                </div>
+
+                {% if book.available_copies > 0 %}
+                <h5 class="fw-bold text-dark mb-1">Borrowing Request Intake</h5>
+                <p class="text-muted small mb-4">Verify your system credentials. Books are tracked automatically under a 30-day return policy ledger rule.</p>
+                
+                <form method="POST" action="{{ url_for('borrow_book', book_id=book.id) }}" class="d-flex flex-column gap-3">
+                    <div>
+                        <label class="form-label small text-secondary fw-semibold mb-1">Your Registered Membership ID *</label>
+                        <input type="text" name="member_id" required placeholder="e.g., CSI-102" class="form-control form-control-lg rounded-3 border py-2.5 text-dark font-bold text-uppercase shadow-none" style="letter-spacing: 0.5px;">
+                        <div class="form-text small text-muted">Must match your offline card designation registered by the administrator.</div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small text-secondary fw-semibold mb-1">Full Borrower Name *</label>
+                            <input type="text" name="user_name" required placeholder="e.g., Robin Thomas" class="form-control form-control-lg rounded-3 border py-2.5 text-dark shadow-none">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-secondary fw-semibold mb-1">10-Digit Mobile Phone *</label>
+                            <input type="tel" name="borrower_phone" required pattern="[0-9]{10}" placeholder="e.g., 9876543210" class="form-control form-control-lg rounded-3 border py-2.5 text-dark shadow-none">
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-csi btn-lg w-100 py-3 rounded-3 shadow-xs font-bold text-uppercase tracking-wider" style="font-size: 0.9rem;">
+                            Confirm Borrowing Allocation Request
+                        </button>
+                    </div>
+                </form>
+                {% else %}
+                <div class="p-4 rounded-4 bg-danger-subtle text-danger border border-danger border-opacity-25 text-center my-2">
+                    <i class="bi bi-exclamation-triangle-fill fs-2 mb-2 d-block"></i>
+                    <h5 class="fw-bold mb-1">Volume Temporarily Out of Stock</h5>
+                    <p class="small mb-0 opacity-75">All physical copies of this text asset are currently allocated to outstanding members. Please check back later.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

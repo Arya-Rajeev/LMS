@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center my-4">
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-sm-5 w-100" style="max-width: 500px;">
+        <div class="mb-4 text-center">
+            <h4 class="fw-bold text-dark tracking-tight m-0">Edit Book Information</h4>
+            <p class="text-muted small mt-1">Update record entries for this book catalog index.</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('edit_book', book_id=book.id) }}" class="d-flex flex-column gap-3">
+            <div>
+                <label class="form-label small text-secondary fw-semibold mb-1">Book Title Name *</label>
+                <input type="text" name="title" value="{{ book.title }}" required class="form-control rounded-3 border py-2 text-dark shadow-none">
+            </div>
+            <div>
+                <label class="form-label small text-secondary fw-semibold mb-1">Author / Writer *</label>
+                <input type="text" name="author" value="{{ book.author }}" required class="form-control rounded-3 border py-2 text-dark shadow-none">
+            </div>
+            <div>
+                <label class="form-label small text-secondary fw-semibold mb-1">Genre Category Label *</label>
+                <input type="text" name="category" value="{{ book.category }}" required class="form-control rounded-3 border py-2 text-dark shadow-none">
+            </div>
+            <div>
+                <label class="form-label small text-secondary fw-semibold mb-1">Adjust Total Stock Volume Copies *</label>
+                <input type="number" name="copies" value="{{ book.total_copies }}" min="1" required class="form-control rounded-3 border py-2 text-dark shadow-none">
+            </div>
+            
+            <div class="d-flex gap-2 mt-2">
+                <a href="{{ url_for('admin_portal') }}" class="btn btn-light border w-50 py-2.5 rounded-3 fw-bold small text-uppercase text-secondary">Cancel</a>
+                <button type="submit" class="btn btn-csi w-50 py-2.5 rounded-3 fw-bold small text-uppercase">Save Updates</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
