@@ -17,7 +17,7 @@
         
         body {
             background-color: #f8fafc;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
         .bg-csi { background-color: var(--csi-dark-green) !important; }
@@ -35,7 +35,6 @@
             transform: translateY(-1px);
         }
         
-        /* Mobile-first card text scaling fixes */
         @media (max-width: 576px) {
             .display-6 { font-size: 1.8rem !important; }
             .card { padding: 1.25rem !important; }
@@ -47,7 +46,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-csi shadow-sm py-3 sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold tracking-tight d-flex align-items-center gap-2" href="{{ url_for('home') }}">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ url_for('home') }}">
                 <i class="bi bi-book-half text-warning fs-4"></i> CSI Dhanuvachapuram Library
             </a>
             
@@ -85,7 +84,7 @@
     <footer class="bg-white border-top py-3.5 mt-auto text-center text-muted small">
         <div class="container">
             <p class="mb-1 text-secondary font-medium" style="font-size: 0.75rem;">© 2026 CSI Dhanuvachapuram Digital Library Platform. All Rights Reserved.</p>
-            <span class="badge bg-success-subtle text-success uppercase tracking-wider px-2 py-1 font-semibold" style="font-size: 0.58rem;">Production Stable Build</span>
+            <span class="badge bg-success-subtle text-success uppercase tracking-wider px-2 py-1 font-semibold" style="font-size: 0.58rem;">Production Stable Build v2.1</span>
         </div>
     </footer>
 
